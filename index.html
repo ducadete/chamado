@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Formulário</title>
+</head>
+<body>
+  <form id="dataForm" onsubmit="sendData(event)">
+    <label for="nome">Nome:</label>
+    <input type="text" id="nome" name="nome" required><br><br>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" required><br><br>
+
+    <label for="mensagem">Mensagem:</label>
+    <textarea id="mensagem" name="mensagem" required></textarea><br><br>
+
+    <button type="submit">Enviar</button>
+  </form>
+
+  <script>
+    function sendData(event) {
+      event.preventDefault();
+
+      const form = document.getElementById('dataForm');
+      const data = {
+        nome: form.nome.value,
+        email: form.email.value,
+        mensagem: form.mensagem.value
+      };
+
+      fetch('https://script.google.com/macros/s/AKfycby2FvuFyBu_tlVYfqZ4U7H1YaGlIlu_syy4PMdbyGa6daBisb00I6pvj3Lrno15Ram4/exec', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`Erro HTTP! status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(result => {
+        alert(result.message);
+        form.reset();
+      })
+      .catch(error => {
+        alert('Erro ao enviar os dados: ' + error.message);
+      });
+    }
+  </script>
+</body>
+</html>
